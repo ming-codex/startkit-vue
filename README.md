@@ -194,7 +194,7 @@ const cleanKey = key
 ### 国际化目录结构设计
 
 ```
-src/i18n/                 # 国际化相关的逻辑的放在同一个目录统一管理
+src/i18n/                 # 国际化相关的逻辑放在i18n目录统一管理
 ├── index.ts              # 主配置文件，整合所有语言包
 ├── utils.ts              # 工具函数（语言获取、设置、加载）
 ├── element-config.ts     # Element Plus国际化配置
