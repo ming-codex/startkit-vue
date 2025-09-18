@@ -16,17 +16,13 @@ export function getLang(): string {
   return 'zh'
 }
 
-// 设置语言
-export function setLang(lang: string) {
+// 设置语言到存储和URL
+export function setLangStorage(lang: string) {
   localStorage.setItem(LANG_KEY, lang)
 
   const params = new URLSearchParams(window.location.search)
   params.set('lang', lang)
   window.history.replaceState({}, '', `?${params.toString()}`)
-
-  import('@/i18n').then(({ i18n }) => {
-    i18n.global.locale.value = lang as any
-  })
 }
 
 // 加载语言包

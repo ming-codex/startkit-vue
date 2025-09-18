@@ -1,4 +1,4 @@
-import { setLang } from '@/i18n/utils'
+import { useLanguage } from '@/composables/useLanguage'
 import type { SupportedLanguage, LanguageSwitchOptions } from '../types'
 
 /**
@@ -8,13 +8,14 @@ import type { SupportedLanguage, LanguageSwitchOptions } from '../types'
  */
 export function useLanguageSwitch(options: LanguageSwitchOptions = {}) {
   const { onSwitch } = options
+  const { switchLanguage } = useLanguage()
 
   /**
    * 切换语言
    * @param lang 目标语言
    */
   function switchLang(lang: SupportedLanguage) {
-    setLang(lang)
+    switchLanguage(lang)
     onSwitch?.(lang)
   }
 
