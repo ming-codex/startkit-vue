@@ -1,4 +1,4 @@
 export default {
-  hello: 'Hello, world',
+  hello: 'Hello！',
   welcome: 'Welcome to the system',
 }
