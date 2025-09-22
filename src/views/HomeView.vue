@@ -612,6 +612,7 @@ const featuresEn = [
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
+  margin-left: 0;
 }
 
 .action-btn.github-btn::before {
