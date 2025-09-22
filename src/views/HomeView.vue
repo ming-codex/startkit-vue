@@ -45,6 +45,11 @@ const viewDocs = () => {
   router.push({ name: 'doc-detail', params: { slug: 'README' } })
 }
 
+// 跳转到GitHub
+const goToGitHub = () => {
+  window.open('https://github.com/ming-codex', '_blank')
+}
+
 // 切换语言
 const toggleLanguage = () => {
   locale.value = locale.value === 'zh' ? 'en' : 'zh'
@@ -186,6 +191,11 @@ const featuresEn = [
         <el-button size="large" class="action-btn secondary" @click="viewDocs">
           <el-icon><Document /></el-icon>
           {{ locale === 'zh' ? '查看文档' : 'View Docs' }}
+        </el-button>
+
+        <el-button size="large" class="action-btn github-btn" @click="goToGitHub">
+          <el-icon><Link /></el-icon>
+          GitHub
         </el-button>
       </section>
 
@@ -574,6 +584,7 @@ const featuresEn = [
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: center;
 }
 
 .action-btn:hover {
@@ -592,6 +603,37 @@ const featuresEn = [
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+}
+
+.action-btn.github-btn {
+  background: linear-gradient(135deg, #24292e, #1a1e22);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn.github-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.action-btn.github-btn:hover::before {
+  left: 100%;
+}
+
+.action-btn.github-btn:hover {
+  background: linear-gradient(135deg, #2d3339, #21262d);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(36, 41, 46, 0.3);
+  transform: translateY(-2px);
 }
 
 .tech-stack {
