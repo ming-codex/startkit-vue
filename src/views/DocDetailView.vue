@@ -49,9 +49,12 @@
         aria-label="回到顶部"
         title="回到顶部"
       >
-        <el-icon class="back-to-top-icon">
-          <ArrowUp />
-        </el-icon>
+        <svg class="back-to-top-icon" viewBox="0 0 16 16" fill="currentColor" style="width: 18px; height: 18px">
+          <path
+            d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06l2.97-2.97H3.75a.75.75 0 0 1 0-1.5h7.44L8.22 4.03a.75.75 0 0 1 0-1.06z"
+            transform="rotate(270 8 8)"
+          />
+        </svg>
       </button>
     </Transition>
   </div>
@@ -126,10 +129,18 @@ watch(
 </script>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .doc-detail {
   background: #ffffff;
   min-height: 100vh;
   color: #24292f;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .header {
@@ -139,12 +150,70 @@ watch(
 }
 
 .header-content {
-  max-width: 1280px;
+  max-width: 982px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 48px;
+  }
+
+  .breadcrumb {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    overflow: hidden;
+  }
+
+  .breadcrumb-link {
+    padding: 6px 8px;
+    font-size: 12px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .breadcrumb-current {
+    font-size: 13px;
+    font-weight: 600;
+    color: #24292f;
+    word-break: break-word;
+    line-height: 1.3;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .breadcrumb-separator {
+    margin: 0 4px;
+    color: #656d76;
+  }
+
+  .actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-height: 36px;
+    white-space: nowrap;
+  }
 }
 
 .breadcrumb {
@@ -164,12 +233,19 @@ watch(
   padding: 6px 12px;
   border-radius: 6px;
   transition: all 0.2s ease;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .breadcrumb-link:hover {
   background: #d0d7de;
   color: #24292f;
   text-decoration: none;
+}
+
+.breadcrumb-link:active {
+  background: #c8d1d9;
+  transform: scale(0.98);
 }
 
 .breadcrumb-separator {
@@ -200,6 +276,8 @@ watch(
   cursor: pointer;
   transition: all 0.2s ease;
   border: 1px solid;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .btn-primary {
@@ -216,10 +294,17 @@ watch(
   color: #ffffff;
 }
 
+.btn-primary:active {
+  background: #1f7a32;
+  border-color: #1f7a32;
+  transform: translateY(0);
+}
+
 .container {
-  max-width: 1280px;
+  max-width: 982px;
   margin: 0 auto;
-  padding: 40px 0px;
+  padding: 40px 0;
+  width: 100%;
 }
 
 .content {
@@ -227,13 +312,82 @@ watch(
   border: 1px solid #d0d7de;
   border-radius: 6px;
   overflow: hidden;
+  width: 100%;
 }
 
-/* GitHub light theme markdown styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .content {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin: 0;
+    width: 100%;
+  }
+
+  :deep(.markdown-body) {
+    padding: 20px 16px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  :deep(.markdown-body h1) {
+    font-size: 1.75em;
+    margin: 20px 0 12px 0;
+    line-height: 1.3;
+  }
+  :deep(.markdown-body h2) {
+    font-size: 1.4em;
+    margin: 18px 0 12px 0;
+    line-height: 1.3;
+  }
+  :deep(.markdown-body h3) {
+    font-size: 1.2em;
+    margin: 16px 0 10px 0;
+    line-height: 1.3;
+  }
+  :deep(.markdown-body h4) {
+    font-size: 1.1em;
+    margin: 14px 0 8px 0;
+    line-height: 1.3;
+  }
+  :deep(.markdown-body h5) {
+    font-size: 1em;
+    margin: 12px 0 8px 0;
+    line-height: 1.3;
+  }
+  :deep(.markdown-body h6) {
+    font-size: 0.95em;
+    margin: 10px 0 8px 0;
+    line-height: 1.3;
+  }
+
+  :deep(.markdown-body p) {
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  :deep(.markdown-body ul),
+  :deep(.markdown-body ol) {
+    padding-left: 1.5em;
+    margin-bottom: 14px;
+  }
+
+  :deep(.markdown-body li) {
+    margin-bottom: 0.3em;
+    line-height: 1.5;
+  }
+}
+
 :deep(.markdown-body) {
-  box-sizing: border-box;
-  min-width: 200px;
-  max-width: 980px;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
   margin: 0;
   padding: 32px;
   font-family:
@@ -244,6 +398,8 @@ watch(
   color: #24292f;
   background-color: #ffffff;
   text-align: left;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 :deep(.markdown-body h1),
@@ -252,8 +408,7 @@ watch(
 :deep(.markdown-body h4),
 :deep(.markdown-body h5),
 :deep(.markdown-body h6) {
-  margin-top: 24px;
-  margin-bottom: 16px;
+  margin: 24px 0 16px 0;
   font-weight: 600;
   line-height: 1.25;
   color: #24292f;
@@ -295,8 +450,7 @@ watch(
 }
 
 :deep(.markdown-body p) {
-  margin-top: 0;
-  margin-bottom: 16px;
+  margin: 0 0 16px 0;
 }
 
 :deep(.markdown-body blockquote) {
@@ -308,8 +462,7 @@ watch(
 
 :deep(.markdown-body ul),
 :deep(.markdown-body ol) {
-  margin-top: 0;
-  margin-bottom: 16px;
+  margin: 0 0 16px 0;
   padding-left: 2em;
 }
 
@@ -337,9 +490,33 @@ watch(
   font-size: 85%;
   line-height: 1.45;
   background-color: #f6f8fa;
-  border-radius: 6px;
   margin: 0 0 16px 0;
-  border: 1px solid #d0d7de;
+  scrollbar-width: thin;
+  scrollbar-color: #d0d7de #f6f8fa;
+}
+
+:deep(.markdown-body pre)::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+:deep(.markdown-body pre)::-webkit-scrollbar-track {
+  background: #f6f8fa;
+  border-radius: 4px;
+}
+
+:deep(.markdown-body pre)::-webkit-scrollbar-thumb {
+  background: #d0d7de;
+  border-radius: 4px;
+  border: 1px solid #f6f8fa;
+}
+
+:deep(.markdown-body pre)::-webkit-scrollbar-thumb:hover {
+  background: #8c959f;
+}
+
+:deep(.markdown-body pre)::-webkit-scrollbar-corner {
+  background: #f6f8fa;
 }
 
 :deep(.markdown-body pre code) {
@@ -356,11 +533,91 @@ watch(
   font-size: 13px;
 }
 
+@media (max-width: 768px) {
+  :deep(.markdown-body pre) {
+    padding: 12px;
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 0 0 14px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #d0d7de #f6f8fa;
+  }
+
+  :deep(.markdown-body pre)::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  :deep(.markdown-body pre)::-webkit-scrollbar-track {
+    background: #f6f8fa;
+    border-radius: 4px;
+  }
+
+  :deep(.markdown-body pre)::-webkit-scrollbar-thumb {
+    background: #d0d7de;
+    border-radius: 4px;
+    border: 1px solid #f6f8fa;
+  }
+
+  :deep(.markdown-body pre)::-webkit-scrollbar-thumb:hover {
+    background: #8c959f;
+  }
+
+  :deep(.markdown-body pre code) {
+    font-size: 12px;
+    white-space: pre;
+    word-break: normal;
+    display: block;
+    min-width: 0;
+  }
+
+  :deep(.markdown-body code) {
+    font-size: 13px;
+    padding: 0.15em 0.3em;
+    word-break: break-word;
+  }
+
+  :deep(.markdown-body .highlight) {
+    margin: 0 0 14px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  :deep(.markdown-body .highlight pre) {
+    margin: 0;
+    padding: 12px;
+    overflow-x: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  :deep(.markdown-body p code),
+  :deep(.markdown-body li code),
+  :deep(.markdown-body td code) {
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow-x: auto;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: text-top;
+  }
+}
+
 :deep(.markdown-body .highlight) {
   background-color: #f6f8fa;
   border-radius: 6px;
   margin-bottom: 16px;
   border: 1px solid #d0d7de;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d0d7de #f6f8fa;
 }
 
 :deep(.markdown-body .highlight pre) {
@@ -369,6 +626,27 @@ watch(
   margin: 0;
   padding: 16px;
   border: none;
+  overflow: visible;
+}
+
+:deep(.markdown-body .highlight)::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+:deep(.markdown-body .highlight)::-webkit-scrollbar-track {
+  background: #f6f8fa;
+  border-radius: 4px;
+}
+
+:deep(.markdown-body .highlight)::-webkit-scrollbar-thumb {
+  background: #d0d7de;
+  border-radius: 4px;
+  border: 1px solid #f6f8fa;
+}
+
+:deep(.markdown-body .highlight)::-webkit-scrollbar-thumb:hover {
+  background: #8c959f;
 }
 
 :deep(.markdown-body .highlight pre code) {
@@ -381,26 +659,34 @@ watch(
 :deep(.markdown-body table) {
   border-spacing: 0;
   border-collapse: collapse;
-  display: block;
-  width: max-content;
+  display: table;
+  width: 100%;
   max-width: 100%;
-  overflow: auto;
+  overflow-x: auto;
   margin: 0 0 16px 0;
   border: 1px solid #d0d7de;
   border-radius: 6px;
+  background-color: #ffffff;
+  table-layout: fixed;
 }
 
 :deep(.markdown-body table th),
 :deep(.markdown-body table td) {
   padding: 6px 13px;
-  border: 1px solid #d0d7de;
   text-align: left;
+  border: 1px solid #d0d7de;
+  vertical-align: top;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 0;
+  overflow-wrap: break-word;
 }
 
 :deep(.markdown-body table th) {
   font-weight: 600;
   background-color: #f6f8fa;
-  border-bottom: 1px solid #d0d7de;
   color: #24292f;
 }
 
@@ -414,6 +700,57 @@ watch(
 
 :deep(.markdown-body table tr:last-child td) {
   border-bottom: none;
+}
+
+:deep(.markdown-body table th:first-child),
+:deep(.markdown-body table td:first-child) {
+  border-left: none;
+}
+
+:deep(.markdown-body table th:last-child),
+:deep(.markdown-body table td:last-child) {
+  border-right: none;
+}
+
+:deep(.markdown-body table tr:first-child th) {
+  border-top: none;
+}
+
+:deep(.markdown-body table tr:last-child td) {
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  :deep(.markdown-body table) {
+    margin: 0 0 14px 0;
+    border-radius: 0;
+    border: 1px solid #d0d7de;
+    font-size: 13px;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    table-layout: fixed;
+  }
+
+  :deep(.markdown-body table th),
+  :deep(.markdown-body table td) {
+    padding: 8px 10px;
+    font-size: 13px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal; /* 允许换行 */
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  :deep(.markdown-body table th) {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 }
 
 :deep(.markdown-body img) {
@@ -441,7 +778,6 @@ watch(
   border-radius: 1px;
 }
 
-/* Task lists */
 :deep(.markdown-body .task-list-item) {
   list-style-type: none;
 }
@@ -451,7 +787,6 @@ watch(
   vertical-align: middle;
 }
 
-/* Inline code in headers */
 :deep(.markdown-body h1 code),
 :deep(.markdown-body h2 code),
 :deep(.markdown-body h3 code),
@@ -494,11 +829,10 @@ watch(
   }
 }
 
-/* 回到顶部按钮 - GitHub风格 */
 .back-to-top {
   position: fixed;
   bottom: 24px;
-  right: calc(50% - 640px + 24px); /* 1280px / 2 + 24px margin */
+  right: 24px;
   width: 40px;
   height: 40px;
   background-color: #ffffff;
@@ -515,6 +849,8 @@ watch(
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .back-to-top:hover {
@@ -538,15 +874,32 @@ watch(
 
 .back-to-top-icon {
   transition: transform 0.2s ease;
-  font-size: 16px;
+  width: 18px;
+  height: 18px;
   color: currentColor;
+  fill: currentColor;
+  display: block;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .back-to-top-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-top-icon {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .back-to-top:hover .back-to-top-icon {
   transform: translateY(-1px);
 }
 
-/* 淡入淡出动画 - GitHub风格 */
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.2s ease;
@@ -559,55 +912,147 @@ watch(
   transform: translateY(8px);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .container {
-    padding: 24px 16px;
+  .back-to-top {
+    right: 16px;
+    bottom: 16px;
+    width: 48px;
+    height: 48px;
   }
+}
 
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+  .header {
+    padding: 12px 0;
+  }
   .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    padding: 0 12px;
+    min-height: 44px;
+    gap: 6px;
+  }
+  .breadcrumb {
+    font-size: 12px;
+  }
+  .breadcrumb-link {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-height: 32px;
+  }
+  .breadcrumb-current {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .breadcrumb-separator {
+    margin: 0 2px;
+  }
+  .btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    min-height: 32px;
   }
 
   :deep(.markdown-body) {
-    padding: 16px;
+    padding: 16px 12px;
     font-size: 14px;
+    min-width: 0;
+    max-width: 100%;
   }
 
-  :deep(.markdown-body table) {
-    font-size: 12px;
+  :deep(.markdown-body h1) {
+    font-size: 1.5em;
+  }
+  :deep(.markdown-body h2) {
+    font-size: 1.3em;
+  }
+  :deep(.markdown-body h3) {
+    font-size: 1.1em;
   }
 
   :deep(.markdown-body pre) {
-    padding: 12px;
+    font-size: 11px;
+    padding: 10px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  :deep(.markdown-body pre code) {
+    min-width: 0;
+    max-width: 100%;
+  }
+  :deep(.markdown-body table) {
     font-size: 12px;
+    min-width: 0;
+  }
+  :deep(.markdown-body table th),
+  :deep(.markdown-body table td) {
+    padding: 6px 8px;
+    min-width: 0;
   }
 
   .back-to-top {
-    bottom: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-  }
-
-  .back-to-top-icon {
-    font-size: 14px;
+    width: 40px;
+    height: 40px;
+    right: 12px;
+    bottom: 12px;
   }
 }
 
-/* 中等屏幕适配 */
-@media (max-width: 1280px) {
-  .back-to-top {
-    right: 24px;
-  }
-}
-
-/* 小屏幕适配 */
 @media (max-width: 768px) {
-  .back-to-top {
-    right: 16px;
+  .doc-detail {
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .doc-detail * {
+    box-sizing: border-box;
+  }
+
+  :deep(.markdown-body) {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  :deep(.markdown-body) * {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  :deep(.markdown-body pre),
+  :deep(.markdown-body code),
+  :deep(.markdown-body table),
+  :deep(.markdown-body img) {
+    max-width: 100%;
+    min-width: 0;
+    width: auto;
+  }
+
+  :deep(.markdown-body pre) {
+    overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
+  }
+
+  :deep(.markdown-body table) {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  :deep(.markdown-body thead),
+  :deep(.markdown-body tbody),
+  :deep(.markdown-body tr) {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
   }
 }
 </style>

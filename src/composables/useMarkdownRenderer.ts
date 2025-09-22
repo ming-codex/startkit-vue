@@ -1,5 +1,19 @@
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js/lib/common'
+import typescript from 'highlight.js/lib/languages/typescript'
+import javascript from 'highlight.js/lib/languages/javascript'
+import json from 'highlight.js/lib/languages/json'
+import css from 'highlight.js/lib/languages/css'
+import xml from 'highlight.js/lib/languages/xml'
+
+// 注册常用语言
+hljs.registerLanguage('typescript', typescript)
+hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('js', javascript)
+hljs.registerLanguage('json', json)
+hljs.registerLanguage('css', css)
+hljs.registerLanguage('html', xml)
+hljs.registerLanguage('xml', xml)
 
 // 单例 MarkdownIt 实例，避免重复创建
 let markdownRenderer: MarkdownIt | null = null
@@ -14,11 +28,11 @@ function createMarkdownRenderer(): MarkdownIt {
       highlight(code: string, lang: string) {
         if (lang && hljs.getLanguage(lang)) {
           try {
-            return `<pre class="hljs"><code>${hljs.highlight(code, { language: lang, ignoreIllegals: true }).value}</code></pre>`
+            return `<pre class="hljs"><code class="language-${lang}">${hljs.highlight(code, { language: lang, ignoreIllegals: true }).value}</code></pre>`
           } catch (_) {}
         }
         const escaped: string = markdownRenderer!.utils.escapeHtml(code)
-        return `<pre class="hljs"><code>${escaped}</code></pre>`
+        return `<pre class="hljs"><code${lang ? ` class="language-${lang}"` : ''}>${escaped}</code></pre>`
       },
     })
   }
