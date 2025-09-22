@@ -150,7 +150,7 @@ const featuresEn = [
 
         <div class="language-switcher">
           <el-button :type="locale === 'zh' ? 'primary' : 'default'" @click="toggleLanguage" class="lang-btn">
-            {{ locale === 'zh' ? '中文' : 'English' }}
+            {{ locale === 'zh' ? 'English' : '中文' }}
           </el-button>
         </div>
       </header>
