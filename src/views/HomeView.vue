@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useLanguage } from '@/composables/useLanguage'
+const { switchLanguage } = useLanguage()
 
 const router = useRouter()
 const { t, locale } = useI18n()
@@ -52,7 +54,7 @@ const goToGitHub = () => {
 
 // 切换语言
 const toggleLanguage = () => {
-  locale.value = locale.value === 'zh' ? 'en' : 'zh'
+  switchLanguage(locale.value === 'zh' ? 'en' : 'zh')
 }
 
 // 功能卡片数据
