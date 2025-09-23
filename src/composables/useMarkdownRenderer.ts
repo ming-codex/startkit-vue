@@ -5,6 +5,7 @@ import javascript from 'highlight.js/lib/languages/javascript'
 import json from 'highlight.js/lib/languages/json'
 import css from 'highlight.js/lib/languages/css'
 import xml from 'highlight.js/lib/languages/xml'
+import 'highlight.js/styles/github.css'
 
 // 注册常用语言
 hljs.registerLanguage('typescript', typescript)
