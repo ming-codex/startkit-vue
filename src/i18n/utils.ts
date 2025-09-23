@@ -57,15 +57,15 @@ export function setLangStorage(lang: string) {
 }
 
 // 加载语言包
-export function loadLocale(mods: Record<string, any>, lang: 'zh' | 'en') {
-  const result: Record<string, any> = {}
+export function loadLocale(mods: Record<string, { default: Record<string, unknown> }>, lang: 'zh' | 'en') {
+  const result: Record<string, Record<string, unknown>> = {}
   Object.entries(mods).forEach(([key, mod]) => {
     if (key.startsWith(`./lang/${lang}/`)) {
       const cleanKey = key
         .replace(/^\.\/lang\/(zh|en)\//, '')
         .replace(/\.ts$/, '')
         .replace(/\//g, '.')
-      result[cleanKey] = (mod as any).default
+      result[cleanKey] = mod.default
     }
   })
   return result

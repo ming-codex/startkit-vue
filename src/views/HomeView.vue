@@ -119,7 +119,7 @@ const featuresEn = [
       <div class="particles">
         <div
           class="particle"
-          v-for="n in 20"
+          v-for="n in 10"
           :key="n"
           :style="{
             left: Math.random() * 100 + '%',
@@ -252,6 +252,7 @@ const featuresEn = [
   filter: blur(80px);
   animation: float 8s ease-in-out infinite;
   opacity: 0.8;
+  will-change: transform;
 }
 
 .orb-1 {
@@ -316,6 +317,7 @@ const featuresEn = [
   border-radius: 50%;
   animation: particle-float linear infinite;
   box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+  will-change: transform, opacity;
 }
 
 @keyframes particle-float {
@@ -347,6 +349,7 @@ const featuresEn = [
   background-size: 60px 60px;
   animation: grid-move 25s linear infinite;
   opacity: 0.4;
+  will-change: transform;
 }
 
 @keyframes grid-move {

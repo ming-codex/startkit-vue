@@ -14,7 +14,7 @@ interface RequestOptions extends RequestInit {
   showSuccess?: boolean
   needToken?: boolean
   retry?: number
-  params?: Record<string, any>
+  params?: Record<string, unknown>
 }
 
 interface LoadingConfig {
@@ -27,7 +27,7 @@ interface LoadingConfig {
 }
 
 // 响应数据类型
-interface ApiResponse<T = any> {
+interface ApiResponse<T = unknown> {
   code: number
   message: string
   data: T
@@ -35,7 +35,7 @@ interface ApiResponse<T = any> {
 
 // ==================== 全局状态 ====================
 const pendingRequests = new Map<string, AbortController>()
-let loadingInstance: any = null
+let loadingInstance: { close: () => void } | null = null
 let loadingCount = 0
 
 const defaultLoadingConfig: LoadingConfig = {
@@ -47,10 +47,10 @@ const defaultLoadingConfig: LoadingConfig = {
 }
 
 // ==================== 工具函数 ====================
-const generateReqKey = (url: string, method: string, params?: any, body?: any): string =>
+const generateReqKey = (url: string, method: string, params?: Record<string, unknown>, body?: unknown): string =>
   [url, method, JSON.stringify(params || {}), JSON.stringify(body || {})].join('&')
 
-const buildUrlWithParams = (baseUrl: string, params?: Record<string, any>): string => {
+const buildUrlWithParams = (baseUrl: string, params?: Record<string, unknown>): string => {
   if (!params || Object.keys(params).length === 0) return baseUrl
 
   const searchParams = new URLSearchParams()
@@ -144,13 +144,25 @@ const handleErrorResponse = async (response: Response) => {
   }
 }
 
-const handleError = (error: any) => {
-  if (error?.name === 'AbortError') {
-    ElMessage.error(error.message || t('network.requestCanceled'))
-  } else if (error?.message?.includes('Failed to fetch')) {
+const handleError = (error: unknown) => {
+  if (error && typeof error === 'object' && 'name' in error && error.name === 'AbortError') {
+    const message =
+      'message' in error && typeof error.message === 'string' ? error.message : t('network.requestCanceled')
+    ElMessage.error(message)
+  } else if (
+    error &&
+    typeof error === 'object' &&
+    'message' in error &&
+    typeof error.message === 'string' &&
+    error.message.includes('Failed to fetch')
+  ) {
     ElMessage.error(t('network.networkConnectionFailed'))
   } else {
-    ElMessage.error(error.message || t('network.requestSendFailed'))
+    const message =
+      error && typeof error === 'object' && 'message' in error && typeof error.message === 'string'
+        ? error.message
+        : t('network.requestSendFailed')
+    ElMessage.error(message)
   }
 }
 
@@ -159,7 +171,7 @@ class HttpClient {
   /**
    * 通用请求方法
    */
-  private async coreRequest<T = any>(url: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+  private async coreRequest<T = unknown>(url: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
     // 解构配置
     const {
       method = 'GET',
@@ -240,11 +252,19 @@ class HttpClient {
         ElMessage.error(data.message || t('network.operationFailed'))
         throw new Error(data.message)
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       cleanup()
 
       // 重复请求不需要处理
-      if (error?.name === 'AbortError' && error.message?.includes(t('network.duplicateRequest'))) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'name' in error &&
+        error.name === 'AbortError' &&
+        'message' in error &&
+        typeof error.message === 'string' &&
+        error.message.includes(t('network.duplicateRequest'))
+      ) {
         return Promise.reject(error)
       }
 
@@ -263,9 +283,9 @@ class HttpClient {
   /**
    * GET 请求
    */
-  async get<T = any>(
+  async get<T = unknown>(
     url: string,
-    params?: Record<string, any>,
+    params?: Record<string, unknown>,
     options?: Omit<RequestOptions, 'method' | 'params'>
   ): Promise<ApiResponse<T>> {
     return this.coreRequest<T>(url, {
@@ -278,9 +298,9 @@ class HttpClient {
   /**
    * POST 请求
    */
-  async post<T = any>(
+  async post<T = unknown>(
     url: string,
-    data?: any,
+    data?: unknown,
     options?: Omit<RequestOptions, 'method' | 'body'>
   ): Promise<ApiResponse<T>> {
     return this.coreRequest<T>(url, {
@@ -293,9 +313,9 @@ class HttpClient {
   /**
    * PUT 请求
    */
-  async put<T = any>(
+  async put<T = unknown>(
     url: string,
-    data?: any,
+    data?: unknown,
     options?: Omit<RequestOptions, 'method' | 'body'>
   ): Promise<ApiResponse<T>> {
     return this.coreRequest<T>(url, {
@@ -308,7 +328,7 @@ class HttpClient {
   /**
    * DELETE 请求
    */
-  async delete<T = any>(url: string, options?: Omit<RequestOptions, 'method'>): Promise<ApiResponse<T>> {
+  async delete<T = unknown>(url: string, options?: Omit<RequestOptions, 'method'>): Promise<ApiResponse<T>> {
     return this.coreRequest<T>(url, {
       ...options,
       method: 'DELETE',
@@ -318,9 +338,9 @@ class HttpClient {
   /**
    * PATCH 请求
    */
-  async patch<T = any>(
+  async patch<T = unknown>(
     url: string,
-    data?: any,
+    data?: unknown,
     options?: Omit<RequestOptions, 'method' | 'body'>
   ): Promise<ApiResponse<T>> {
     return this.coreRequest<T>(url, {
@@ -333,7 +353,7 @@ class HttpClient {
   /**
    * 文件上传
    */
-  async upload<T = any>(
+  async upload<T = unknown>(
     url: string,
     file: File | FormData,
     options?: Omit<RequestOptions, 'method' | 'body' | 'headers'>

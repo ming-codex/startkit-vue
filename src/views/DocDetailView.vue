@@ -116,7 +116,7 @@ watch(
     loading.value = true
     try {
       const content = await markdownIndex.getContentBySlug(String(slug))
-      html.value = renderMarkdown(content || '', String(slug))
+      html.value = await renderMarkdown(content || '', String(slug))
     } catch (error) {
       console.error('Failed to load document:', error)
       html.value = '<p>Failed to load document.</p>'

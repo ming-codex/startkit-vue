@@ -29,7 +29,9 @@ function createMarkdownRenderer(): MarkdownIt {
         if (lang && hljs.getLanguage(lang)) {
           try {
             return `<pre class="hljs"><code class="language-${lang}">${hljs.highlight(code, { language: lang, ignoreIllegals: true }).value}</code></pre>`
-          } catch (_) {}
+          } catch {
+            // 忽略高亮错误，使用默认渲染
+          }
         }
         const escaped: string = markdownRenderer!.utils.escapeHtml(code)
         return `<pre class="hljs"><code${lang ? ` class="language-${lang}"` : ''}>${escaped}</code></pre>`

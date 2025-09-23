@@ -74,7 +74,24 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: (id) => {
             if (id.includes('node_modules')) {
-              return 'vendor' // 所有三方库合并为 vendor.js
+              // Element Plus 单独分包
+              if (id.includes('element-plus')) {
+                return 'element-plus'
+              }
+              // Vue 相关库分包
+              if (id.includes('vue') || id.includes('@vue')) {
+                return 'vue-vendor'
+              }
+              // 国际化相关库
+              if (id.includes('vue-i18n')) {
+                return 'i18n'
+              }
+              // Markdown 相关库
+              if (id.includes('markdown-it') || id.includes('highlight.js')) {
+                return 'markdown'
+              }
+              // 其他第三方库
+              return 'vendor'
             }
           },
         },

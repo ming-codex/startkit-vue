@@ -13,7 +13,7 @@ export function useLanguage() {
     // 更新存储和URL
     setLangStorage(lang)
     // 直接更新 i18n 实例
-    i18n.global.locale.value = lang as any
+    i18n.global.locale.value = lang as 'zh' | 'en'
   }
 
   /**
