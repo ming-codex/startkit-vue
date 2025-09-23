@@ -6,7 +6,7 @@ export interface MarkdownDocMeta {
   path: string
 }
 
-const markdownModules = import.meta.glob(['../markdown/**/*.md', '../*.md', '../../**/*.md'], {
+const markdownModules = import.meta.glob(['../docs/**/*.md', '../*.md', '../../**/*.md'], {
   query: '?raw',
   import: 'default',
 }) as Record<string, () => Promise<string>>
@@ -23,9 +23,7 @@ function extractTitle(md: string): string {
 function toSlug(filePath: string): string {
   // 处理不同的路径前缀
   let withoutPrefix = filePath
-  if (filePath.startsWith('../markdown/')) {
-    withoutPrefix = filePath.replace(/^\.\.\/markdown\//, '')
-  } else if (filePath.startsWith('../docs/')) {
+  if (filePath.startsWith('../docs/')) {
     withoutPrefix = filePath.replace(/^\.\.\/docs\//, '')
   } else if (filePath.startsWith('../../')) {
     withoutPrefix = filePath.replace(/^\.\.\/\.\.\//, '')

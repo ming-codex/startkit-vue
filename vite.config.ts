@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     // 设置基础路径为相对路径，生成的静态资源路径将以 './' 开头
-    base: './',
+    base: mode === 'development' ? '/' : './',
 
     // 定义全局常量替换
     define: {

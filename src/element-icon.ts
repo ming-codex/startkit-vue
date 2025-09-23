@@ -1,7 +1,7 @@
 import type { App } from 'vue'
-import { Document, Link, Lightning, Tools, Cellphone, Setting } from '@element-plus/icons-vue'
+import { Document, Link, Lightning, Tools, Cellphone, Setting, Clock } from '@element-plus/icons-vue'
 
-const icons = { Document, Link, Lightning, Tools, Cellphone, Setting }
+const icons = { Document, Link, Lightning, Tools, Cellphone, Setting, Clock }
 
 export default {
   install(app: App) {
