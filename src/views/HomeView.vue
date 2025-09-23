@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguage } from '@/composables/useLanguage'
@@ -11,6 +11,7 @@ const { t, locale } = useI18n()
 // 响应式数据
 const isLoaded = ref(false)
 const currentTime = ref('')
+const animationEnabled = ref(false)
 
 // 获取当前时间
 const updateTime = () => {
@@ -21,25 +22,25 @@ const updateTime = () => {
 // 组件挂载后执行
 onMounted(() => {
   updateTime()
-  setInterval(updateTime, 1000)
+  const timeInterval = setInterval(updateTime, 1000)
+
+  // 延迟启用动画，提升首屏性能
   setTimeout(() => {
     isLoaded.value = true
-  }, 500)
+    // 用户交互后再启用复杂动画
+    const enableAnimations = () => {
+      animationEnabled.value = true
+      document.removeEventListener('mousemove', enableAnimations)
+      document.removeEventListener('click', enableAnimations)
+    }
+    document.addEventListener('mousemove', enableAnimations, { once: true })
+    document.addEventListener('click', enableAnimations, { once: true })
+  }, 100)
 
-  // 添加鼠标跟随效果
-  const container = document.querySelector('.welcome-container')
-  if (container) {
-    container.addEventListener('mousemove', (e: Event) => {
-      const mouseEvent = e as MouseEvent
-      const orbs = document.querySelectorAll('.gradient-orb')
-      orbs.forEach((orb, index) => {
-        const speed = (index + 1) * 0.02
-        const x = mouseEvent.clientX * speed - (orb as HTMLElement).offsetWidth / 2
-        const y = mouseEvent.clientY * speed - (orb as HTMLElement).offsetHeight / 2
-        ;(orb as HTMLElement).style.transform = `translate(${x}px, ${y}px)`
-      })
-    })
-  }
+  // 清理定时器
+  onUnmounted(() => {
+    clearInterval(timeInterval)
+  })
 })
 
 // 查看文档
@@ -107,31 +108,11 @@ const featuresEn = [
 
 <template>
   <div class="welcome-container">
-    <!-- 背景装饰 -->
-    <div class="background-decoration">
+    <!-- 简化的背景装饰 -->
+    <div class="background-decoration" :class="{ 'animations-enabled': animationEnabled }">
       <div class="gradient-orb orb-1"></div>
       <div class="gradient-orb orb-2"></div>
       <div class="gradient-orb orb-3"></div>
-      <div class="gradient-orb orb-4"></div>
-      <div class="gradient-orb orb-5"></div>
-
-      <!-- 粒子效果 -->
-      <div class="particles">
-        <div
-          class="particle"
-          v-for="n in 10"
-          :key="n"
-          :style="{
-            left: Math.random() * 100 + '%',
-            top: Math.random() * 100 + '%',
-            animationDelay: Math.random() * 10 + 's',
-            animationDuration: Math.random() * 10 + 10 + 's',
-          }"
-        ></div>
-      </div>
-
-      <!-- 动态网格背景 -->
-      <div class="grid-background"></div>
     </div>
 
     <!-- 主要内容 -->
@@ -250,9 +231,18 @@ const featuresEn = [
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  animation: float 8s ease-in-out infinite;
   opacity: 0.8;
   will-change: transform;
+}
+
+/* 默认状态：静态 */
+.gradient-orb {
+  animation: none;
+}
+
+/* 启用动画状态 */
+.background-decoration.animations-enabled .gradient-orb {
+  animation: float 8s ease-in-out infinite;
 }
 
 .orb-1 {
@@ -261,7 +251,6 @@ const featuresEn = [
   background: linear-gradient(45deg, #6366f1, #8b5cf6);
   top: -10%;
   left: -10%;
-  animation-delay: 0s;
 }
 
 .orb-2 {
@@ -270,7 +259,6 @@ const featuresEn = [
   background: linear-gradient(45deg, #ec4899, #f472b6);
   top: 50%;
   right: -15%;
-  animation-delay: 2s;
 }
 
 .orb-3 {
@@ -279,86 +267,6 @@ const featuresEn = [
   background: linear-gradient(45deg, #22c55e, #10b981);
   bottom: -10%;
   left: 50%;
-  animation-delay: 4s;
-}
-
-.orb-4 {
-  width: 300px;
-  height: 300px;
-  background: linear-gradient(45deg, #f59e0b, #f97316);
-  top: 20%;
-  right: 20%;
-  animation-delay: 6s;
-}
-
-.orb-5 {
-  width: 250px;
-  height: 250px;
-  background: linear-gradient(45deg, #06b6d4, #0891b2);
-  bottom: 30%;
-  left: 10%;
-  animation-delay: 1s;
-}
-
-.particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: linear-gradient(45deg, #6366f1, #ec4899);
-  border-radius: 50%;
-  animation: particle-float linear infinite;
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
-  will-change: transform, opacity;
-}
-
-@keyframes particle-float {
-  0% {
-    transform: translateY(100vh) translateX(0) scale(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100px) translateX(100px) scale(1);
-    opacity: 0;
-  }
-}
-
-.grid-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: grid-move 25s linear infinite;
-  opacity: 0.4;
-  will-change: transform;
-}
-
-@keyframes grid-move {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
 }
 
 @keyframes float {
@@ -747,16 +655,9 @@ const featuresEn = [
 
   .orb-1,
   .orb-2,
-  .orb-3,
-  .orb-4,
-  .orb-5 {
+  .orb-3 {
     width: 200px;
     height: 200px;
-  }
-
-  .particle {
-    width: 3px;
-    height: 3px;
   }
 }
 
@@ -786,16 +687,9 @@ const featuresEn = [
 
   .orb-1,
   .orb-2,
-  .orb-3,
-  .orb-4,
-  .orb-5 {
+  .orb-3 {
     width: 150px;
     height: 150px;
-  }
-
-  .particle {
-    width: 2px;
-    height: 2px;
   }
 }
 </style>
