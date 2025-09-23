@@ -27,6 +27,12 @@ jobs:
       - name: Build project
         run: npm run build
 
+      # 压缩静态资源 (js, css, html, svg 等)
+      - name: Gzip static assets
+        run: |
+          find dist -type f -regex ".*\.\(js\|css\|html\|svg\|json\|txt\)" -exec gzip -9 -k {} \;
+
+
       # 自动检测 build 目录 (React) 或 dist 目录 (Vue)
       - name: Detect publish dir
         id: detect
@@ -39,7 +45,7 @@ jobs:
             echo "❌ Error: No build or dist directory found!"
             exit 1
           fi
-
+    
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
