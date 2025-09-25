@@ -74,14 +74,6 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: (id) => {
             if (id.includes('node_modules')) {
-              // Element Plus 单独分包
-              if (id.includes('element-plus') || id.includes('@element-plus/icons-vue')) {
-                return 'element-plus'
-              }
-              // Markdown 相关库 - 延迟加载
-              if (id.includes('markdown-it') || id.includes('highlight.js')) {
-                return 'markdown'
-              }
               // 其他第三方库
               return 'vendor'
             }
